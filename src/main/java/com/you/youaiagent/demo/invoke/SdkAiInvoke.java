@@ -2,6 +2,7 @@ package com.you.youaiagent.demo.invoke;
 
 import java.util.Arrays;
 import java.lang.System;
+
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
@@ -11,8 +12,12 @@ import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.protocol.Protocol;
+import com.alibaba.dashscope.utils.JsonUtils;
 
-public class SdkAi {
+/**
+ * aliyun 灵机 AI SDK调用
+ */
+public class SdkAiInvoke {
     public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {
         Generation gen = new Generation(Protocol.HTTP.getValue(), "https://dashscope.aliyuncs.com/api/v1");
         Message systemMsg = Message.builder()
@@ -25,7 +30,7 @@ public class SdkAi {
                 .build();
         GenerationParam param = GenerationParam.builder()
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
-                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                .apiKey(TestApiKey.API_KEY)
                 .model("qwen3-max")
                 .messages(Arrays.asList(systemMsg, userMsg))
                 .resultFormat(GenerationParam.ResultFormat.MESSAGE)
@@ -35,7 +40,10 @@ public class SdkAi {
     public static void main(String[] args) {
         try {
             GenerationResult result = callWithMessage();
-            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());
+            System.out.println(JsonUtils.toJson(result));
+            System.out.println();
+            System.out.println(result);
+//            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());
         } catch (ApiException | NoApiKeyException | InputRequiredException e) {
             System.err.println("错误信息："+e.getMessage());
         }
