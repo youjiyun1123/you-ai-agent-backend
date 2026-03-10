@@ -1,0 +1,8 @@
+spring:
+  ai:
+    mcp:
+      server:
+        stdio: false
+        name: you-image-search-mcp-server
+        version: 0.0.1
+        type: SYNC
